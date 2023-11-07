@@ -7,6 +7,10 @@ import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static org.bnp.rovertest.utils.Constants.LEFT;
+import static org.bnp.rovertest.utils.Constants.RIGHT;
+import static org.bnp.rovertest.utils.Constants.MOVE;
+
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Scanner fileScanner = new Scanner(new File(args[0]));
@@ -54,15 +58,15 @@ public class Main {
 
             for (String instruction : instructionsArray) {
                 switch (instruction) {
-                    case "L" -> {
+                    case LEFT -> {
                         Command turnLeftCommand = Rover::turnToLeft;
                         turnLeftCommand.executeCommand(rover);
                     }
-                    case "R" -> {
+                    case RIGHT -> {
                         Command turnRightCommand = Rover::turnToRight;
                         turnRightCommand.executeCommand(rover);
                     }
-                    case "M" -> {
+                    case MOVE -> {
                         Command moveForwardCommand = r -> r.moveForward(finalX, finalY);
                         moveForwardCommand.executeCommand(rover);
                     }

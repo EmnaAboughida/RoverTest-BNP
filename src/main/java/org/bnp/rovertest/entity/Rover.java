@@ -1,5 +1,10 @@
 package org.bnp.rovertest.entity;
 
+import static org.bnp.rovertest.utils.Constants.WEST;
+import static org.bnp.rovertest.utils.Constants.SOUTH;
+import static org.bnp.rovertest.utils.Constants.EAST;
+import static org.bnp.rovertest.utils.Constants.NORTH;
+
 public class Rover {
 
     int x;
@@ -26,30 +31,30 @@ public class Rover {
 
     public void turnToLeft() {
         orientation = switch (orientation) {
-            case 'W' -> 'S';
-            case 'S' -> 'E';
-            case 'E' -> 'N';
-            case 'N' -> 'W';
+            case WEST -> SOUTH;
+            case SOUTH -> EAST;
+            case EAST -> NORTH;
+            case NORTH -> WEST;
             default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
         };
     }
 
     public void turnToRight() {
         orientation = switch (orientation) {
-            case 'W' -> 'N';
-            case 'N' -> 'E';
-            case 'E' -> 'S';
-            case 'S' -> 'W';
+            case WEST -> NORTH;
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
             default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
         };
     }
 
     public void moveForward(int finalX, int finalY) {
         switch (orientation) {
-            case 'W' -> x = Math.max(x - 1, 0);
-            case 'N' -> y = Math.min(y + 1, finalY);
-            case 'E' -> x = Math.min(x + 1, finalX);
-            case 'S' -> y = Math.max(y - 1, 0);
+            case WEST -> x = Math.max(x - 1, 0);
+            case NORTH -> y = Math.min(y + 1, finalY);
+            case EAST -> x = Math.min(x + 1, finalX);
+            case SOUTH -> y = Math.max(y - 1, 0);
             default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
         };
     }
