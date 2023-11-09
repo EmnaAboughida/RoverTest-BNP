@@ -1,28 +1,30 @@
 package org.bnp.rovertest.entity;
 
-import static org.bnp.rovertest.utils.Constants.WEST;
-import static org.bnp.rovertest.utils.Constants.SOUTH;
-import static org.bnp.rovertest.utils.Constants.EAST;
-import static org.bnp.rovertest.utils.Constants.NORTH;
+import java.util.logging.Logger;
+
+import static org.bnp.rovertest.utils.Constants.*;
 
 public class Rover {
 
-    int x;
-    int y;
+    public static final Logger LOGGER = Logger.getLogger(Rover.class.getName());
+    Position position;
     char orientation;
 
-    public Rover(int x, int y, char orientation) {
-        this.x = x;
-        this.y = y;
+    public Rover(Position position, char orientation) {
+        this.position = position;
         this.orientation = orientation;
     }
 
     public int getX() {
-        return x;
+        return position.getX();
     }
 
     public int getY() {
-        return y;
+        return position.getY();
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     public char getOrientation() {
@@ -35,7 +37,7 @@ public class Rover {
             case SOUTH -> EAST;
             case EAST -> NORTH;
             case NORTH -> WEST;
-            default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
+            default -> NONE;
         };
     }
 
@@ -45,22 +47,33 @@ public class Rover {
             case NORTH -> EAST;
             case EAST -> SOUTH;
             case SOUTH -> WEST;
-            default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
+            default -> NONE;
         };
     }
 
-    public void moveForward(int finalX, int finalY) {
-        switch (orientation) {
-            case WEST -> x = Math.max(x - 1, 0);
-            case NORTH -> y = Math.min(y + 1, finalY);
-            case EAST -> x = Math.min(x + 1, finalX);
-            case SOUTH -> y = Math.max(y - 1, 0);
-            default -> throw new IllegalArgumentException("Invalid orientation: " + orientation);
-        };
+    public void moveForward(Grid grid) {
+
+        if (grid.isOutOfGrid(position, orientation)) {
+            LOGGER.warning("Rover is out of grid, it is moved back inside !");
+        } else {
+
+            switch (orientation) {
+                case WEST -> position.moveX(-1);
+                case NORTH -> position.moveY(1);
+                case EAST -> position.moveX(1);
+                case SOUTH -> position.moveY(-1);
+            }
+
+            if (grid.isPositionTaken(position)) {
+                LOGGER.info("Rovers collided at position " + position);
+            }
+        }
     }
 
     @Override
     public String toString() {
+        int x = getX();
+        int y = getY();
         return x + " " + y + " " + orientation;
     }
 }
