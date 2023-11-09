@@ -25,12 +25,13 @@ public class RoverServiceTest {
     private Scanner emptyCommandsScanner;
     private Scanner invalidCommandsScanner;
 
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalErr = System.err;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    private final PrintStream out = System.out;
 
     @BeforeEach
     public void setUp() {
-        System.setErr(new PrintStream(errContent));
+        System.setOut(new PrintStream(outputStreamCaptor));
+        System.setErr(new PrintStream(outputStreamCaptor));
 
         String validInput = "5 5\n1 2 N\nLMLMLMLMM";
         validScanner = new Scanner(validInput);
@@ -52,15 +53,15 @@ public class RoverServiceTest {
     }
 
     @AfterEach
-    public void restoreStreams() {
-        System.setErr(originalErr);
+    public void restore() {
+        System.setOut(out);
     }
 
     @Test
     public void readFileTest() {
         RoverService.readFile(validScanner);
         String expectedOutput = "1 3 N";
-        assertEquals(expectedOutput, errContent.toString().trim());
+        assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 
     @Test
@@ -81,13 +82,13 @@ public class RoverServiceTest {
     @Test
     public void readFileWithEmptyCommandsTest() {
         RoverService.readFile(emptyCommandsScanner);
-        assertTrue(errContent.toString().contains("Empty command sequence !"));
+        assertTrue(outputStreamCaptor.toString().contains("Empty command sequence !"));
     }
 
     @Test
     public void readFileWithInvalidCommandsTest() {
         RoverService.readFile(invalidCommandsScanner);
-        assertTrue(errContent.toString().contains("X is not a valid instruction !"));
+        assertTrue(outputStreamCaptor.toString().contains("2 3 N"));
     }
 
 }

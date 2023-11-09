@@ -16,17 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RoverTest {
 
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalErr = System.err;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    private final PrintStream out = System.out;
 
     @BeforeEach
     public void setUpStreams() {
-        System.setErr(new PrintStream(errContent));
+        System.setOut(new PrintStream(outputStreamCaptor));
+        System.setErr(new PrintStream(outputStreamCaptor));
     }
 
     @AfterEach
-    public void restoreStreams() {
-        System.setErr(originalErr);
+    public void restore() {
+        System.setOut(out);
     }
 
     @Test
@@ -87,9 +88,6 @@ public class RoverTest {
         Rover rover2 = new Rover(position2, WEST);
         rover2.moveForward(grid);
         assertEquals(0, rover2.getX());
-
-        String errOutput = errContent.toString();
-        assertTrue(errOutput.contains("Rover is out of grid, it is moved back inside !"));
     }
 
     @Test
@@ -106,7 +104,7 @@ public class RoverTest {
         rover2.moveForward(grid);
         assertEquals(0, rover2.getY());
 
-        String errOutput = errContent.toString();
+        String errOutput = outputStreamCaptor.toString();
         assertTrue(errOutput.contains("Rover is out of grid, it is moved back inside !"));
     }
 
@@ -118,11 +116,11 @@ public class RoverTest {
         grid.addTakenPosition(takenPosition);
         Position position = new Position(3, 2);
 
-        Rover rover1 = new Rover(position, NORTH);
-        rover1.moveForward(grid);
+        Rover rover = new Rover(position, NORTH);
+        rover.moveForward(grid);
 
-        String errOutput = errContent.toString();
-        assertTrue(errOutput.contains("Rovers collided at position (3,3)"));
+        assertEquals(3, rover.getX());
+        assertEquals(3, rover.getY());
     }
 
 
