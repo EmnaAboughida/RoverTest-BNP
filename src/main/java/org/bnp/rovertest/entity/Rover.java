@@ -7,8 +7,8 @@ import static org.bnp.rovertest.utils.Constants.*;
 public class Rover {
 
     public static final Logger LOGGER = Logger.getLogger(Rover.class.getName());
-    Position position;
-    char orientation;
+    private Position position;
+    private char orientation;
 
     public Rover(Position position, char orientation) {
         this.position = position;

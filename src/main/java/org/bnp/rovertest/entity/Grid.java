@@ -7,8 +7,8 @@ import static org.bnp.rovertest.utils.Constants.NORTH;
 
 public class Grid {
 
-    int maxX;
-    int maxY;
+    private int maxX;
+    private int maxY;
     ArrayList<Position> takenPositions = new ArrayList<>();
 
     public Grid(int maxX, int maxY) {

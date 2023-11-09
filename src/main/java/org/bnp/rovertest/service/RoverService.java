@@ -27,8 +27,10 @@ public class RoverService {
         while (fileScanner.hasNext()) {
             //Create Rover
             Rover rover = createRover(fileScanner, grid);
-            fileScanner.nextLine();
 
+            if (fileScanner.hasNextLine()) {
+                fileScanner.nextLine();
+            }
             //Move Rover
             String instructions = fileScanner.hasNextLine() ? fileScanner.nextLine() : "";
             if (instructions.isEmpty()) {
@@ -50,7 +52,7 @@ public class RoverService {
         return new Grid(maxX, maxY);
     }
 
-    public static Rover createRover(Scanner fileScanner, Grid grid) {
+    private static Rover createRover(Scanner fileScanner, Grid grid) {
         int x = getIntArgument(fileScanner);
         int y = getIntArgument(fileScanner);
         Position initialPosition = new Position(x, y);
